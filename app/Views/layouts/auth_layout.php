@@ -38,7 +38,7 @@
 </head>
 
 <body class="bg-pattern min-h-screen flex items-center justify-center p-6 font-sans text-slate-900 antialiased">
-    <main class="w-full max-w-md relative z-10">
+    <main>
         <?= $this->renderSection('content') ?>
 
         <?= $this->renderSection('scripts') ?>
