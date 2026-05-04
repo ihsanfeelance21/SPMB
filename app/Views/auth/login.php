@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <div class="w-full max-w-md relative z-10">
-    <div class="bg-white/80 backdrop-blur-[20px] rounded-xl border border-slate-200 shadow-xl shadow-[#003d9b]/5 p-8 flex flex-col gap-8 relative overflow-hidden">
+    <div class="bg-white/80 backdrop-blur-[20px] rounded-xl border border-blue-300 shadow-xl shadow-[#003d9b]/5 p-8 flex flex-col gap-8 relative overflow-hidden">
         <div class="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#c0e8ff] via-[#0052cc] to-[#7bd1fa]"></div>
         <div class="text-center flex flex-col items-center gap-2">
             <div class="w-16 h-16 bg-[#f0f3ff] rounded-full flex items-center justify-center mb-4 border border-[#d8e3fb]">
