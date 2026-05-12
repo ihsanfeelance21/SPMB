@@ -12,5 +12,5 @@ class SettingsModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nama_sekolah', 'logo', 'tahun_pelajaran', 'tanggal_buka', 'tanggal_tutup'];
+    protected $allowedFields    = ['nama_sekolah', 'logo', 'favicon', 'tahun_pelajaran', 'tanggal_buka', 'tanggal_tutup'];
 }

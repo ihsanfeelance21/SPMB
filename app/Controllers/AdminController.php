@@ -193,6 +193,64 @@ class AdminController extends BaseController
             'tanggal_tutup'   => $this->request->getPost('tanggal_tutup'),
         ];
 
+        // Handle logo upload
+        $logo = $this->request->getFile('logo');
+
+        if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+            // Validate file
+            $validationRule = [
+                'logo' => [
+                    'rules'  => 'uploaded[logo]|max_size[logo,2048]|ext_in[logo,png,jpg,jpeg]|is_image[logo]',
+                    'errors' => [
+                        'max_size' => 'Ukuran file logo maksimal 2MB.',
+                        'ext_in'   => 'Format file harus PNG, JPG, atau JPEG.',
+                        'is_image' => 'File harus berupa gambar.',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($validationRule)) {
+                return redirect()->back()->withInput()->with('error', implode(' ', $this->validator->getErrors()));
+            }
+
+            $uploadPath = FCPATH . 'uploads';
+
+            // Ensure upload directory exists
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            // Delete old logo and favicon files if they exist
+            $oldSettings = $id ? $settingsModel->find($id) : null;
+            if ($oldSettings) {
+                $oldLogo = $oldSettings['logo'] ?? null;
+                $oldFavicon = $oldSettings['favicon'] ?? null;
+
+                if ($oldLogo && file_exists($uploadPath . '/' . $oldLogo)) {
+                    unlink($uploadPath . '/' . $oldLogo);
+                }
+                if ($oldFavicon && file_exists($uploadPath . '/' . $oldFavicon)) {
+                    unlink($uploadPath . '/' . $oldFavicon);
+                }
+            }
+
+            // Determine extension & save logo
+            $ext = $logo->getClientExtension();
+            $logoFileName = 'logo.' . $ext;
+            $logo->move($uploadPath, $logoFileName, true); // true = overwrite
+
+            // Auto-convert to favicon (32x32) using CI4 Image Library
+            $faviconFileName = 'favicon.png';
+            $imageService = \Config\Services::image();
+            $imageService
+                ->withFile($uploadPath . '/' . $logoFileName)
+                ->resize(32, 32, false, 'height')
+                ->save($uploadPath . '/' . $faviconFileName);
+
+            $data['logo']    = $logoFileName;
+            $data['favicon'] = $faviconFileName;
+        }
+
         if ($id) {
             $settingsModel->update($id, $data);
         } else {

@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'SPMB' ?> - SPMB</title>
+    <title><?= $title ?? 'SPMB' ?> - <?= esc($settings['nama_sekolah'] ?? 'SPMB') ?></title>
+    <?php if (!empty($settings['favicon'])): ?>
+        <link rel="icon" type="image/png" href="<?= base_url('uploads/' . esc($settings['favicon'])) ?>">
+    <?php else: ?>
+        <link rel="icon" href="<?= base_url('favicon.ico') ?>">
+    <?php endif; ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

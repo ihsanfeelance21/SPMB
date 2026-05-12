@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\BiodataModel;
 use App\Models\PasswordResetModel;
+use App\Models\SettingsModel;
 
 class AuthController extends BaseController
 {
@@ -16,7 +17,11 @@ class AuthController extends BaseController
             return redirect()->to(in_array($role, ['admin', 'superadmin']) ? '/admin' : '/user/dashboard');
         }
 
-        return view('auth/login');
+        $settingsModel = new SettingsModel();
+
+        return view('auth/login', [
+            'settings' => $settingsModel->first(),
+        ]);
     }
 
     public function processLogin()
@@ -66,7 +71,8 @@ class AuthController extends BaseController
         if (session()->get('isLoggedIn')) {
             return redirect()->to('/');
         }
-        return view('auth/register');
+        $settingsModel = new SettingsModel();
+        return view('auth/register', ['settings' => $settingsModel->first()]);
     }
 
     public function processRegister()
@@ -142,7 +148,8 @@ class AuthController extends BaseController
 
     public function forgotPassword()
     {
-        return view('auth/forgot');
+        $settingsModel = new SettingsModel();
+        return view('auth/forgot', ['settings' => $settingsModel->first()]);
     }
 
     public function processForgotPassword()
